@@ -1,27 +1,33 @@
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 
 public class test {
 
 public static void main(String[] args) throws Exception {
 
+    Properties prop = new Properties();
+    InputStream input = null;
     boolean title_success = false;
     boolean text_success = false;
     WebClient client = new WebClient();
 
-    if ( args.length < 3 ) {
-	System.out.println("Please enter three arguments\n");
-	System.out.println("1 - Website to test - full http:// address\n");
-	System.out.println("2 - Title of the website - used as an assetion\n");
-	System.out.println("3 - Random text on the web page to match - this is a CONTAINS match\n");
-	System.exit(1);
-    }
+    // load properties file
+    input = new FileInputStream("config.properties");
+    prop.load(input);
+    String address = prop.getProperty("website_address");
+    String title = prop.getProperty("website_title");
+    String string = prop.getProperty("website_text");
 
-    HtmlPage currentPage = client.getPage(args[0]);
+
+    HtmlPage currentPage = client.getPage(address);
     try {
-    	WebAssert.assertTitleEquals(currentPage, args[1]);
+    	WebAssert.assertTitleEquals(currentPage, title);
 	title_success = true;
 	}
     catch (AssertionError e) {
@@ -32,7 +38,7 @@ public static void main(String[] args) throws Exception {
 	if (title_success==true) System.out.println("Title: Successfully Tested");
 	}
     try {
-    	WebAssert.assertTextPresent(currentPage, args[2]);
+    	WebAssert.assertTextPresent(currentPage, string);
 	text_success = true;
 	}
     catch (AssertionError e) {
@@ -44,9 +50,6 @@ public static void main(String[] args) throws Exception {
 	}
 
 	if (text_success && title_success) System.out.println("Success is 100%");
-//    client.waitForBackgroundJavaScript(10000);
-//    String textSource = currentPage.asXml();
-//    System.out.println(textSource);
 }
 
 }
