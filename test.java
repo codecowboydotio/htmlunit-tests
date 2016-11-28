@@ -26,6 +26,7 @@ public static void main(String[] args) throws Exception {
 	}
     catch (AssertionError e) {
 	System.out.println(e);
+	System.exit(1);
 	}
     finally {
 	if (title_success==true) System.out.println("Title: Successfully Tested");
@@ -36,6 +37,7 @@ public static void main(String[] args) throws Exception {
 	}
     catch (AssertionError e) {
 	System.out.println(e);
+	System.exit(2);
 	}
     finally {
 	if (text_success) System.out.println("Text: Successfully Tested");
